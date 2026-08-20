@@ -1,0 +1,39 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{BC8A1FFA-BEE3-4634-8014-F334798102B3}") = "TradingPlatformCpp.Server", "TradingPlatformCpp.Server\TradingPlatformCpp.Server.vcxproj", "{C4E2F212-CCAA-4F97-8D0B-A40F6B6B44E9}"
+EndProject
+Project("{BC8A1FFA-BEE3-4634-8014-F334798102B3}") = "TradingPlatformCpp.Client", "TradingPlatformCpp.Client\TradingPlatformCpp.Client.vcxproj", "{54A1963D-8879-4198-99C8-80F088A412B0}"
+EndProject
+Project("{BC8A1FFA-BEE3-4634-8014-F334798102B3}") = "TradingPlatformCpp.Stress", "TradingPlatformCpp.Stress\TradingPlatformCpp.Stress.vcxproj", "{F91A66B7-1D50-4EA2-A5F6-0F8E3F295C61}"
+EndProject
+Project("{BC8A1FFA-BEE3-4634-8014-F334798102B3}") = "TradingPlatformCpp.WebHost", "TradingPlatformCpp.WebHost\TradingPlatformCpp.WebHost.vcxproj", "{9EAE16D0-F54A-4A28-9A9B-8CDB2FCE6E9E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4E2F212-CCAA-4F97-8D0B-A40F6B6B44E9}.Debug|x64.ActiveCfg = Debug|x64
+		{C4E2F212-CCAA-4F97-8D0B-A40F6B6B44E9}.Debug|x64.Build.0 = Debug|x64
+		{C4E2F212-CCAA-4F97-8D0B-A40F6B6B44E9}.Release|x64.ActiveCfg = Release|x64
+		{C4E2F212-CCAA-4F97-8D0B-A40F6B6B44E9}.Release|x64.Build.0 = Release|x64
+		{54A1963D-8879-4198-99C8-80F088A412B0}.Debug|x64.ActiveCfg = Debug|x64
+		{54A1963D-8879-4198-99C8-80F088A412B0}.Debug|x64.Build.0 = Debug|x64
+		{54A1963D-8879-4198-99C8-80F088A412B0}.Release|x64.ActiveCfg = Release|x64
+		{54A1963D-8879-4198-99C8-80F088A412B0}.Release|x64.Build.0 = Release|x64
+		{F91A66B7-1D50-4EA2-A5F6-0F8E3F295C61}.Debug|x64.ActiveCfg = Debug|x64
+		{F91A66B7-1D50-4EA2-A5F6-0F8E3F295C61}.Debug|x64.Build.0 = Debug|x64
+		{F91A66B7-1D50-4EA2-A5F6-0F8E3F295C61}.Release|x64.ActiveCfg = Release|x64
+		{F91A66B7-1D50-4EA2-A5F6-0F8E3F295C61}.Release|x64.Build.0 = Release|x64
+		{9EAE16D0-F54A-4A28-9A9B-8CDB2FCE6E9E}.Debug|x64.ActiveCfg = Debug|x64
+		{9EAE16D0-F54A-4A28-9A9B-8CDB2FCE6E9E}.Debug|x64.Build.0 = Debug|x64
+		{9EAE16D0-F54A-4A28-9A9B-8CDB2FCE6E9E}.Release|x64.ActiveCfg = Release|x64
+		{9EAE16D0-F54A-4A28-9A9B-8CDB2FCE6E9E}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

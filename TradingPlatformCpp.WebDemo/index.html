@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mercury Lane Exchange</title>
+    <meta
+        name="description"
+        content="Mercury Lane Exchange browser login.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="backdrop backdrop-a"></div>
+    <div class="backdrop backdrop-b"></div>
+    <div class="backdrop backdrop-c"></div>
+
+    <section class="login-screen" id="loginView">
+        <div class="login-panel panel">
+            <div class="brand-mark login-brand">
+                <div class="brand-badge">ML</div>
+                <div>
+                    <p class="eyebrow">Mercury Lane Exchange</p>
+                    <h1>Sign In</h1>
+                </div>
+            </div>
+
+            <div class="panel-topline">
+                <span class="status-dot"></span>
+                <p>Session Access</p>
+            </div>
+
+            <div class="panel-heading">
+                <h2>Login</h2>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <label class="field">
+                    <span>Username</span>
+                    <input
+                        id="loginName"
+                        type="text"
+                        name="username"
+                        placeholder="e.g. alice"
+                        autocomplete="off"
+                        maxlength="24"
+                        required>
+                </label>
+
+                <button type="submit" class="primary-button">Sign In</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="dashboard hidden" id="dashboardView">
+        <header class="topbar panel">
+            <div class="topbar-brand">
+                <div class="brand-badge small">ML</div>
+                <div>
+                    <p class="eyebrow">Mercury Lane Exchange</p>
+                    <h2>Interactive Trading Dashboard</h2>
+                </div>
+            </div>
+
+            <div class="topbar-stats">
+                <div class="stat-pill">
+                    <span class="pill-label">User</span>
+                    <strong id="currentUserName">alice</strong>
+                </div>
+                <div class="stat-pill">
+                    <span class="pill-label">Total Equity</span>
+                    <strong id="heroEquity">$0.00</strong>
+                </div>
+                <div class="stat-pill">
+                    <span class="pill-label">Open Orders</span>
+                    <strong id="heroOpenOrders">0</strong>
+                </div>
+                <div class="stat-pill">
+                    <span class="pill-label">Last Update</span>
+                    <strong id="lastUpdatedText">--:--:--</strong>
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+                <button class="ghost-button" type="button" id="resetDemoBtn">Reset Demo</button>
+                <button class="ghost-button" type="button" id="logoutBtn">Log Out</button>
+            </div>
+        </header>
+
+        <div class="ticker-shell panel">
+            <div class="ticker-head">
+                <p class="eyebrow">Live Ribbon</p>
+                <span id="connectedUsersText">0 traders online</span>
+            </div>
+            <div class="ticker-track" id="tickerTrack"></div>
+        </div>
+
+        <div class="dashboard-grid">
+            <section class="panel market-panel">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Market Pulse</p>
+                        <h3>Symbol Watchlist</h3>
+                    </div>
+                    <span id="selectedSymbolLabel">ACME selected</span>
+                </div>
+                <div class="symbol-grid" id="symbolGrid"></div>
+                <div class="market-footnote">
+                    <span class="legend-item positive">Green means price strength</span>
+                    <span class="legend-item negative">Coral highlights selling pressure</span>
+                </div>
+            </section>
+
+            <section class="panel chart-panel">
+                <div class="section-head chart-head">
+                    <div>
+                        <p class="eyebrow">Price Story</p>
+                        <h3 id="chartTitle">ACME price arc</h3>
+                    </div>
+                    <div class="chart-kpis">
+                        <div>
+                            <span>Last</span>
+                            <strong id="chartLastPrice">$0.00</strong>
+                        </div>
+                        <div>
+                            <span>Spread</span>
+                            <strong id="chartSpread">$0.00</strong>
+                        </div>
+                        <div>
+                            <span>Trades</span>
+                            <strong id="chartTrades">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-stage">
+                    <svg id="priceChart" viewBox="0 0 860 340" preserveAspectRatio="none" aria-label="Price history chart"></svg>
+                </div>
+
+                <div class="chart-footer">
+                    <div class="time-strip" id="timeStrip"></div>
+                    <div class="chart-note">
+                        Recent executions update the curve and the order book immediately.
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel order-panel">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Order Entry</p>
+                        <h3>Compose a trade</h3>
+                    </div>
+                    <span class="status-pill">Limit only</span>
+                </div>
+
+                <form id="orderForm" class="order-form">
+                    <label class="field">
+                        <span>Symbol</span>
+                        <select id="orderSymbol"></select>
+                    </label>
+                    <label class="field">
+                        <span>Side</span>
+                        <select id="orderSide">
+                            <option value="BUY">Buy</option>
+                            <option value="SELL">Sell</option>
+                        </select>
+                    </label>
+                    <div class="two-up">
+                        <label class="field">
+                            <span>Quantity</span>
+                            <input id="orderQuantity" type="number" min="1" step="1" value="5" required>
+                        </label>
+                        <label class="field">
+                            <span>Limit Price</span>
+                            <input id="orderPrice" type="number" min="0.01" step="0.01" value="100.00" required>
+                        </label>
+                    </div>
+
+                    <div class="form-summary">
+                        <div>
+                            <span>Estimated value</span>
+                            <strong id="estimatedOrderValue">$0.00</strong>
+                        </div>
+                        <div>
+                            <span>Available balance</span>
+                            <strong id="availableBalanceText">$0.00</strong>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="primary-button">Submit Order</button>
+                </form>
+
+                <div class="quick-actions">
+                    <button type="button" class="mini-action" data-preset="maker-buy">Join Best Bid</button>
+                    <button type="button" class="mini-action" data-preset="maker-sell">Join Best Ask</button>
+                    <button type="button" class="mini-action" data-preset="cross-spread">Cross The Spread</button>
+                </div>
+            </section>
+
+            <section class="panel portfolio-panel">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Account State</p>
+                        <h3>Portfolio overview</h3>
+                    </div>
+                    <span id="portfolioReturnText">0.00%</span>
+                </div>
+
+                <div class="portfolio-metrics">
+                    <article>
+                        <span>Cash</span>
+                        <strong id="portfolioCash">$0.00</strong>
+                    </article>
+                    <article>
+                        <span>Reserved Cash</span>
+                        <strong id="portfolioReservedCash">$0.00</strong>
+                    </article>
+                    <article>
+                        <span>Available Cash</span>
+                        <strong id="portfolioAvailableCash">$0.00</strong>
+                    </article>
+                    <article>
+                        <span>Total Equity</span>
+                        <strong id="portfolioEquity">$0.00</strong>
+                    </article>
+                </div>
+
+                <div class="table-shell compact">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th>Held</th>
+                                <th>Reserved</th>
+                                <th>Available</th>
+                                <th>Market Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="portfolioTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel book-panel">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Depth View</p>
+                        <h3>Order book</h3>
+                    </div>
+                    <span id="orderBookSymbolText">ACME</span>
+                </div>
+                <div class="book-columns">
+                    <div>
+                        <p class="book-label positive">Bids</p>
+                        <div id="buyBookLevels" class="book-levels"></div>
+                    </div>
+                    <div>
+                        <p class="book-label negative">Asks</p>
+                        <div id="sellBookLevels" class="book-levels"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel orders-panel">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Order Trail</p>
+                        <h3>My orders</h3>
+                    </div>
+                    <span id="ordersMetaText">0 open / 0 recent</span>
+                </div>
+
+                <div class="table-shell">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Symbol</th>
+                                <th>Side</th>
+                                <th>Price</th>
+                                <th>Remain</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel trades-panel">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Audit Feed</p>
+                        <h3>Recent trades</h3>
+                    </div>
+                    <span id="tradeCountText">0 executions</span>
+                </div>
+
+                <div class="table-shell">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Symbol</th>
+                                <th>Price</th>
+                                <th>Qty</th>
+                                <th>Buyer</th>
+                                <th>Seller</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tradesTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="panel activity-panel">
+                <div class="section-head">
+                    <div>
+                        <p class="eyebrow">Execution Log</p>
+                        <h3>Platform activity</h3>
+                    </div>
+                    <span id="activityMetaText">Live timeline</span>
+                </div>
+                <ul class="activity-list" id="activityList"></ul>
+            </section>
+
+        </div>
+    </section>
+
+    <div class="toast-layer" id="toastLayer" aria-live="polite" aria-atomic="true"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

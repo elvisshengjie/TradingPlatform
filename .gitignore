@@ -1,0 +1,25 @@
+# Visual Studio and generated build files
+.vs/
+**/.vs/
+Debug/
+Release/
+x64/
+x86/
+build/
+out/
+bin/
+obj/
+*.user
+*.suo
+*.ipch
+*.obj
+*.pdb
+*.idb
+*.ilk
+*.tlog
+*.log
+*.exe
+
+# Runtime state
+trading_state.txt
+
