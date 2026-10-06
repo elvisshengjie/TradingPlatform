@@ -1,331 +1,108 @@
-# Trading Platform Option 3 C++ Starter
+# Trading Platform
 
-This folder now contains a **Visual Studio 2022 C++ solution** for Assignment 5 Option 3.
+A Windows C++17 trading simulator built for a networking assignment. Multiple console clients connect to a TCP server to trade fictional shares, view their portfolios, and receive market updates. The repository also includes a browser dashboard for presenting the same trading concepts.
 
-The **main trading system and submission deliverable** are the C++ projects in the Visual Studio solution below:
+All balances, shares, and trades are simulated. The browser demo runs its own JavaScript trading engine and stores its state in the browser; it does not connect to the C++ TCP server.
 
-- `TradingPlatformCpp.sln`
-- `Assignment_5_Design_Report_SIT-ID.pdf`
+## Features
 
-This repository also includes an optional **browser-based companion UI** in `TradingPlatformCpp.WebDemo`.
-That web interface is maintained as a **separate process/program**, which is permitted by the instructor.
-It is intended as a presentation-friendly frontend/demo layer and does not replace the core C++ solution as the main deliverable.
+- Username-based accounts with $10,000 in starting cash and 50 shares each of `ACME`, `BETA`, and `GAMMA`.
+- Buy and sell limit orders with price/time priority, partial fills, and cancellation.
+- Separate order books for each symbol and built-in market maker quotes.
+- Cash and share reservations, with insufficient-funds and insufficient-holdings checks.
+- Account, open-order, and trade-history views with live TCP updates.
+- Server state saved to `trading_state.txt` for reconnects and restarts.
+- A concurrent stress client for generating busy network traffic.
+- A browser dashboard with order entry, portfolios, order history, and recent trades.
 
-The older C# files are left here only as an earlier prototype. The `.cpp/.hpp` version is the current one.
+## Requirements
 
-## Projects
+- Windows 10 or 11. The C++ programs use Windows Winsock.
+- Visual Studio 2022 with the **Desktop development with C++** workload, **MSVC v143** tools, and a **Windows 10/11 SDK**.
+- Git to clone the repository.
+- A modern browser for the optional web demo.
 
-- `TradingPlatformCpp.Server`
-  TCP trading server in C++
-- `TradingPlatformCpp.Client`
-  Interactive console client in C++
-- `TradingPlatformCpp.Common`
-  Shared headers for protocol and socket helpers
-- `TradingPlatformCpp.Stress`
-  C++ busy-communication load generator
-- `TradingPlatformCpp.WebDemo`
-  Separate browser UI demo for presenting the trading platform with a login page and dashboard
+No third-party C++ libraries, database, Node.js, or Python installation is required.
 
-## Build And Test In Visual Studio 2022
+## Get the project
 
-1. Open `TradingPlatformCpp.sln` in Visual Studio 2022.
-2. Set the solution configuration to `Release`.
-3. Set the solution platform to `x64`.
-4. Right-click the solution and choose `Build Solution`.
-5. To start from a clean test, delete `trading_state.txt` from the **server process working directory** before running.
+Run in PowerShell:
 
-Persistence note:
-
-- The server saves `trading_state.txt` using a relative path.
-- This means the file is created in the folder where `TradingPlatformCpp.Server.exe` is launched.
-- If you run the server from Visual Studio with default settings, check the server's startup/working directory and remove the `trading_state.txt` found there before starting a fresh demo.
-
-Recommended startup testing in Visual Studio:
-
-- Right-click `TradingPlatformCpp.Server` and choose `Set as Startup Project`.
-- Open `Project > Properties > Debugging`.
-- Set `Command Arguments` to:
-
-```text
-5000
+```powershell
+git clone https://github.com/elvisshengjie/TradingPlatform.git
+cd TradingPlatform
 ```
 
-- Run the server with `Ctrl+F5`.
-- Then set `TradingPlatformCpp.Client` as the startup project.
-- In `Project > Properties > Debugging`, set `Command Arguments` to:
+For the existing local copy, use:
 
-```text
-127.0.0.1 5000 alice
+```powershell
+Set-Location 'C:\portfolio\Trading platform'
 ```
 
-- Run with `Ctrl+F5`.
-- Open a second Visual Studio instance, or use Command Prompt, and run another client as:
+Run the commands below from the repository root unless stated otherwise.
+
+## Build
+
+### Visual Studio 2022
+
+1. Open `TradingPlatformCpp.sln`.
+2. Select **Release** and **x64** in the solution toolbar.
+3. Choose **Build > Build Solution** (`Ctrl+Shift+B`).
+
+This builds the server, console client, stress client, and web host. Executables are written to:
 
 ```text
-127.0.0.1 5000 bob
-```
-
-Visual Studio stress test setup:
-
-- Set `TradingPlatformCpp.Stress` as the startup project.
-- In `Project > Properties > Debugging`, set `Command Arguments` to:
-
-```text
-127.0.0.1 5000 10 40 20 demo
-```
-
-- Run with `Ctrl+F5` while the server is already running.
-
-## Web Demo
-
-The folder `TradingPlatformCpp.WebDemo` contains a standalone browser-based interface for presentation/demo purposes.
-
-Important clarification:
-
-- The web demo is **not generated by Visual Studio**
-- The web demo is **allowed to be maintained by a separate process/program**
-- The Visual Studio C++ solution remains the **main assignment implementation**
-
-To open the web demo for reliable multi-tab testing without Python:
-
-1. Build `TradingPlatformCpp.WebHost` in Visual Studio 2022 using `Release | x64`.
-2. Set `TradingPlatformCpp.WebHost` as the startup project.
-3. Run it with `Ctrl+F5`.
-4. Open `http://localhost:8080` in the browser.
-5. Open two fresh tabs from that `localhost` address and login separately as `alice` and `bob`.
-6. Use the dashboard to demonstrate symbol switching, order entry, portfolio updates, order history, and recent trades.
-
-Optional command-line run after building:
-
-```text
+build\TradingPlatformCpp.Server\Release\TradingPlatformCpp.Server.exe
+build\TradingPlatformCpp.Client\Release\TradingPlatformCpp.Client.exe
+build\TradingPlatformCpp.Stress\Release\TradingPlatformCpp.Stress.exe
 build\TradingPlatformCpp.WebHost\Release\TradingPlatformCpp.WebHost.exe
 ```
 
-Notes:
+### Command line
 
-- The current web demo is designed as a clean graphical interface for presentation.
-- Its state is stored in browser local storage so the same user can refresh and continue the demo.
-- If you open `index.html` directly with a `file://` URL, some browsers isolate storage per tab for local files. In that mode, `alice` in one tab and `bob` in another may not share the same order book, so matching can appear broken.
-- `TradingPlatformCpp.WebHost` is a tiny C++ static-file server that serves the web demo on `localhost` so both tabs share the same browser origin.
-- Use the `Reset Demo` button in the page if you want to return it to a clean state before presenting.
+Open **Developer PowerShell for VS 2022**, change to the repository root, and run:
 
-## Web Demo Test Checklist
-
-Run these tests from `http://localhost:8080`, not from `file://`.
-For a clean run, press `Reset Demo` first and then open two fresh tabs.
-
-1. Login and starting portfolio
-   - Tab 1: login as `alice`
-   - Tab 2: login as `bob`
-   - Expected:
-   - both users start with `$10,000.00` cash
-   - both users start with `50` shares each of `ACME`, `BETA`, and `GAMMA`
-   - the default `ACME` order book shows system bid `$99.00` and system ask `$101.00`
-
-2. Two-tab exact-price match
-   - In `alice`, place `BUY 5 ACME @ 100.00`
-   - In `bob`, place `SELL 5 ACME @ 100.00`
-   - Expected:
-   - both orders become `FILLED`
-   - a trade appears in the recent trades table at `$100.00`
-   - `alice` ACME holdings become `55`
-   - `bob` ACME holdings become `45`
-   - `alice` cash becomes `$9,500.00`
-   - `bob` cash becomes `$10,500.00`
-
-3. Partial fill and remaining quantity
-   - Press `Reset Demo`, then login again as `alice` and `bob`
-   - In `alice`, place `BUY 5 ACME @ 100.00`
-   - In `bob`, place `SELL 3 ACME @ 100.00`
-   - Expected:
-   - `bob` order becomes `FILLED`
-   - `alice` order becomes `PARTIAL` with `2/5` remaining
-   - `alice` reserved cash becomes `$200.00`
-   - `alice` ACME holdings become `53`
-   - `bob` ACME holdings become `47`
-   - a trade appears for quantity `3` at `$100.00`
-
-4. Cancel remaining open order
-   - Continue from the previous test
-   - In `alice`, cancel the remaining open order
-   - Expected:
-   - the order status becomes `CANCELLED`
-   - `alice` reserved cash returns to `$0.00`
-   - the order no longer appears as open in the order book
-
-5. Immediate fill against the market maker
-   - Press `Reset Demo`
-   - In `alice`, place `BUY 1 ACME @ 101.00`
-   - Expected:
-   - the order fills immediately
-   - the trade shows seller as `MARKET_MAKER`
-   - `alice` cash becomes `$9,899.00`
-   - `alice` ACME holdings become `51`
-
-6. Insufficient cash rejection
-   - Press `Reset Demo`
-   - In `alice`, try `BUY 200 ACME @ 100.00`
-   - Expected:
-   - the order is rejected
-   - an error toast is shown
-   - no open order is created
-
-7. Insufficient holdings rejection
-   - Press `Reset Demo`
-   - In `bob`, try `SELL 60 ACME @ 100.00`
-   - Expected:
-   - the order is rejected
-   - an error toast is shown
-   - no open order is created
-
-8. Symbol isolation
-   - Press `Reset Demo`
-   - In `alice`, place `BUY 2 BETA @ 75.00`
-   - Switch both tabs between `ACME`, `BETA`, and `GAMMA`
-   - Expected:
-   - the open order appears only in the `BETA` book
-   - `ACME` and `GAMMA` books remain unchanged
-   - portfolio balances still update globally for the account
-
-9. Persistence across refresh
-   - Press `Reset Demo`
-   - In `alice`, place `BUY 2 ACME @ 100.00`
-   - Refresh the browser tab
-   - Expected:
-   - `alice` stays on the same account
-   - the order, balances, and holdings are still visible after refresh
-
-10. Reset demo state
-   - After creating a few orders and trades, click `Reset Demo`
-   - Expected:
-   - all users, orders, trades, and activity are cleared
-   - the app returns to the login page
-   - a fresh login starts again from the original balances and holdings
-
-## Client commands
-
-- `symbol <sym>`
-- `market [sym]`
-- `account`
-- `orders`
-- `history`
-- `buy <qty> <price>`
-- `buy <sym> <qty> <price>`
-- `sell <qty> <price>`
-- `sell <sym> <qty> <price>`
-- `cancel <orderId>`
-- `refresh [sym]`
-- `quit`
-
-## Protocol
-
-This C++ version uses a simple line-based TCP protocol.
-
-Examples:
-
-- `LOGIN|alice`
-- `BUY|3|101.00`
-- `BUY|BETA|3|75.00`
-- `SELL|GAMMA|5|125.00`
-- `CANCEL|ORD0001`
-- `REFRESH`
-- `REFRESH|GAMMA`
-- `SYMBOL|ACME`
-
-The server sends `INFO`, `ERROR`, and structured `SNAPSHOT_*` lines back to each client.
-
-## What is implemented
-
-- Username login with reconnect-safe account state
-- Cash balance plus separate holdings for `ACME`, `BETA`, and `GAMMA`
-- Buy and sell limit orders
-- Price/time-priority matching with separate books per symbol
-- Built-in market maker quotes per symbol for one-client demos
-- Order cancellation
-- Snapshot refresh after each state change
-- Per-symbol recent order and trade history
-- Persistent server state in `trading_state.txt` for restart recovery
-- Console market/account/order views with focus-symbol switching
-
-## Manual test checklist
-
-Use three Visual Studio console windows started with `Ctrl+F5`:
-
-- Window 1: `TradingPlatformCpp.Server`
-- Window 2: `TradingPlatformCpp.Client` with `127.0.0.1 5000 alice`
-- Window 3: `TradingPlatformCpp.Client` with `127.0.0.1 5000 bob`
-
-Clean start in Visual Studio:
-
-1. Close all running server, client, and stress windows.
-2. Delete `trading_state.txt` from the server process working directory in File Explorer if you want a fresh state.
-3. In Visual Studio, use `Build > Clean Solution`.
-4. Build again in `Release | x64`.
-5. Start the server first with `Ctrl+F5`by startup project as server
-6. Start `alice` with `Ctrl+F5`startup project as cilent. By typing alice as username
-7. Start `bob` with `Ctrl+F5`startup project as cilent. by typing bob as username
-
-1. Initial login and holdings
-text
-   alice
-
-```text
-account
-```
-text
-   bob
-
-```text
-account
+```powershell
+msbuild .\TradingPlatformCpp.sln /m /p:Configuration=Release /p:Platform=x64
 ```
 
-   - Expected:
-   - both users show `10000.00` cash
-   - both users show `50` shares each of `ACME`, `BETA`, and `GAMMA`
+## Run the C++ trading application
 
-2. Duplicate login protection
-   - Open another Visual Studio client window, or temporarily launch one more client instance from Visual Studio with the same client project.
-   - Use command arguments:
+Keep each program running in its own PowerShell window, with all windows opened at the repository root.
 
-```text
-127.0.0.1 5000 alice
+**Window 1 - start the server:**
+
+```powershell
+.\build\TradingPlatformCpp.Server\Release\TradingPlatformCpp.Server.exe 5000
 ```
 
-   - Expected:
-   - the server rejects the duplicate `alice` login
+**Window 2 - connect as Alice:**
 
-3. Switch symbol and view market
-   - In `alice`, run:
-
-```text
-symbol BETA
-market
-symbol GAMMA
-market
+```powershell
+.\build\TradingPlatformCpp.Client\Release\TradingPlatformCpp.Client.exe 127.0.0.1 5000 alice
 ```
 
-   - Expected:
-   - the snapshot summary changes to the chosen symbol
-   - `BETA` and `GAMMA` show independent books
+**Window 3 - connect as Bob:**
 
-4. Place a BETA buy order
-   - In `alice`, run:
+```powershell
+.\build\TradingPlatformCpp.Client\Release\TradingPlatformCpp.Client.exe 127.0.0.1 5000 bob
+```
+
+The server defaults to port `5000`. The client defaults to `127.0.0.1:5000` and prompts for a username if none is provided. Use different usernames for simultaneous clients; a duplicate active login is rejected.
+
+To launch through Visual Studio, set the server as the startup project and use **Project > Properties > Debugging > Command Arguments** with `5000`, then press `Ctrl+F5`. Launch clients separately from PowerShell, or use another Visual Studio instance with the client as its startup project and arguments `127.0.0.1 5000 alice`.
+
+### Try a trade
+
+With fresh accounts, enter these commands in Alice's console:
 
 ```text
-symbol BETA
 buy BETA 5 75.00
 orders
-market
 account
 ```
 
-   - Expected:
-   - an open `BETA` buy order appears
-   - best bid becomes `75.00`
-   - reserved cash becomes `375.00`
-
-5. Partial fill from bob
-   - In `bob`, run:
+Then enter these in Bob's console:
 
 ```text
 sell BETA 3 75.00
@@ -334,167 +111,94 @@ history
 account
 ```
 
-   - In `alice`, run:
+Three shares trade at $75.00. Alice now holds 53 BETA shares with 2 shares left on her buy order and $150 reserved. Bob holds 47 BETA shares and $10,225 cash. In Alice's console, use `orders` to find the remaining order ID, then cancel it with `cancel <orderId>`.
 
-```text
-orders
-history
-account
+### Console commands
+
+| Command | Action |
+| --- | --- |
+| `help` | List supported commands. |
+| `symbol <sym>` | Select `ACME`, `BETA`, or `GAMMA`. |
+| `market [sym]` | View the order book. |
+| `account` | View cash, reservations, and holdings. |
+| `orders` | View your orders. |
+| `history` | View recent trades for the selected symbol. |
+| `buy <qty> <price>` | Place a buy limit order on the selected symbol. |
+| `buy <sym> <qty> <price>` | Place a buy limit order on a specific symbol. |
+| `sell <qty> <price>` | Place a sell limit order on the selected symbol. |
+| `sell <sym> <qty> <price>` | Place a sell limit order on a specific symbol. |
+| `cancel <orderId>` | Cancel one of your open orders. |
+| `refresh [sym]` | Request a fresh market and account snapshot. |
+| `quit` | Disconnect. |
+
+### Saved state
+
+The server reads and writes `trading_state.txt` in its **process working directory**. Launching it from the repository root keeps that file in the root. Restart from the same working directory to restore accounts, orders, and trade history.
+
+For a fresh demonstration, stop the server and rename or remove that state file before restarting. This resets the saved simulation. When launching through Visual Studio, check the project's debugging working directory to locate the file. Runtime state is excluded from Git.
+
+## Run the browser demo
+
+After building, run:
+
+```powershell
+.\build\TradingPlatformCpp.WebHost\Release\TradingPlatformCpp.WebHost.exe
 ```
 
-   - Expected:
-   - both clients receive a trade notification
-   - `bob` cash becomes `10225.00`
-   - `bob` BETA holdings become `47`
-   - `alice` order becomes `2/5 [PARTIAL]`
-   - `alice` BETA holdings become `53`
-   - `alice` reserved cash becomes `150.00`
+1. Open **http://localhost:8080**.
+2. Open a second tab at the same address in the same browser profile.
+3. Log in as `alice` in one tab and `bob` in the other.
+4. Place a buy order for 5 ACME shares at $100.00 as Alice, then sell 5 ACME shares at $100.00 as Bob.
+5. Review the filled orders, trade history, and updated portfolios.
 
-6. Cancel remaining order
-   - In `alice`, run:
+The web host only serves the HTML, CSS, and JavaScript files. You can run this demo without starting the TCP trading server. Exchange state is shared through `localStorage`; each tab's login is stored in `sessionStorage`. Use the same origin and browser profile for both tabs. Use **Reset Demo** to clear the browser simulation and start again.
 
-```text
-cancel ORD0001
-orders
-account
+Serve the demo over HTTP rather than opening `index.html` directly, so tabs share the same browser storage. To change the HTTP port or specify the web folder explicitly:
+
+```powershell
+.\build\TradingPlatformCpp.WebHost\Release\TradingPlatformCpp.WebHost.exe 8081 .\TradingPlatformCpp.WebDemo
 ```
 
-   - Expected:
-   - open orders become `None`
-   - the recent order shows `CANCELLED`
-   - reserved cash returns to `0.00`
+Then open **http://localhost:8081**.
 
-7. Validate separate books by symbol
-   - In `alice`, run:
+## Run the stress client
 
-```text
-symbol ACME
-market
-symbol BETA
-market
-symbol GAMMA
-market
+With the TCP server running, open another PowerShell window:
+
+```powershell
+.\build\TradingPlatformCpp.Stress\Release\TradingPlatformCpp.Stress.exe 127.0.0.1 5000 10 40 20 demo
 ```
 
-   - Expected:
-   - each symbol has its own best bid and ask
-   - changes in `BETA` do not affect `ACME` or `GAMMA`
+Arguments are `host`, `port`, `clients`, `operations per client`, `maximum delay in milliseconds`, and `username prefix`. This example starts 10 clients with 40 operations each and random delays up to 20 ms. It prints command, accepted-order, trade-notice, snapshot, error, and client-failure counts.
 
-8. Validation errors
-   - In `bob`, run:
+Stress accounts are saved in the server state. Use a fresh username prefix for independent runs, or reset the saved simulation before a clean demonstration.
 
-```text
-sell GAMMA 1000 125.00
-buy ACME 1000000 1000.00
-orders
-```
+## Project structure
 
-   - Expected:
-   - insufficient holdings error for `GAMMA`
-   - insufficient cash error for `ACME`
-   - no invalid open order is added
+| Path | Purpose |
+| --- | --- |
+| `TradingPlatformCpp.sln` | Visual Studio solution containing four executable projects. |
+| `TradingPlatformCpp.Server/` | TCP server, matching engine, account state, and persistence. |
+| `TradingPlatformCpp.Client/` | Interactive console client. |
+| `TradingPlatformCpp.Common/` | Shared protocol and Winsock helper headers. |
+| `TradingPlatformCpp.Stress/` | Concurrent traffic generator. |
+| `TradingPlatformCpp.WebHost/` | C++ HTTP server for the browser demo. |
+| `TradingPlatformCpp.WebDemo/` | HTML, CSS, and JavaScript dashboard. |
+| `Assignment_5_Design_Report_2403446.pdf` | Assignment design report. |
+| `CSD2161_Group_Self-Eva.xlsx` | Group self-evaluation document. |
 
-9. Reconnect recovery
-   - In `alice`, run:
+The TCP application uses newline-delimited messages such as `LOGIN|alice`, `BUY|BETA|5|75.00`, and `CANCEL|ORD0001`. The server responds with `INFO`, `ERROR`, and structured `SNAPSHOT_*` messages.
 
-```text
-quit
-```
+## Troubleshooting
 
-   - Start `alice` again from Visual Studio with `Ctrl+F5`.
+- **MSVC v143 or SDK missing:** Modify your Visual Studio installation and install the C++ workload, v143 build tools, and a Windows SDK.
+- **Executable missing:** Build the solution in `Release | x64` and check the output paths above.
+- **Client cannot connect:** Start the TCP server first and use the same port for server and client.
+- **Port already in use:** Stop the previous instance or choose another port and update the client arguments or browser URL.
+- **Web host cannot find the demo:** Launch from the repository root or pass `TradingPlatformCpp.WebDemo` as the web-root argument.
+- **Browser tabs show different state:** Use the same `http://localhost:8080` address and browser profile for both tabs.
+- **Previous orders or balances reappear:** Reset the relevant C++ state file or use the browser's **Reset Demo** button.
 
-   - Then in `alice`, run:
+## Credits
 
-```text
-symbol BETA
-account
-orders
-history
-refresh
-```
-
-   - Expected:
-   - balances are restored
-   - per-symbol holdings are restored
-   - order and trade history are restored
-
-10. Server restart recovery
-   - Before restarting the server, create fresh `GAMMA` activity.
-   - In `alice`, run:
-
-```text
-buy GAMMA 4 125.00
-orders
-```
-
-   - In `bob`, run:
-
-```text
-sell GAMMA 2 125.00
-account
-```
-
-   - Expected before restart:
-   - `alice` has an open `GAMMA` order with `2/4 [PARTIAL]`
-
-   - Stop the server window with `Ctrl+C`.
-   - Confirm `trading_state.txt` exists in the server process working directory with File Explorer.
-   - Start the server again from Visual Studio with `Ctrl+F5`.
-
-   - Start `alice` again from Visual Studio with `Ctrl+F5`.
-   - Start `bob` again from Visual Studio with `Ctrl+F5`.
-   - Then in both clients run:
-
-```text
-symbol GAMMA
-account
-orders
-history
-refresh
-```
-
-   - Expected after restart:
-   - cash is restored
-   - per-symbol holdings are restored
-   - open `GAMMA` orders are restored
-   - trade history is restored from `trading_state.txt`
-
-11. Busy communication demo
-   - With the server running, set `TradingPlatformCpp.Stress` as the startup project in Visual Studio.
-   - Set its command arguments to:
-
-```text
-127.0.0.1 5000 10 40 20 demo
-```
-
-   - Run it with `Ctrl+F5`.
-
-   - Expected:
-   - many concurrent clients connect
-   - traffic is generated across `ACME`, `BETA`, and `GAMMA`
-   - the summary reports high command and snapshot counts
-   - errors should stay low or at zero
-
-## Busy communication demo
-
-To demonstrate a busy communication scenario for the networking class in Visual Studio:
-
-1. Keep the server running.
-2. Set `TradingPlatformCpp.Stress` as the startup project.
-
-
-3. Run with `Ctrl+F5`.
-
-What it does:
-
-- Opens many concurrent TCP client connections
-- Logs in each client with a unique username prefix
-- Sends rapid alternating buy/sell/refresh requests across `ACME`, `BETA`, and `GAMMA`
-- Forces frequent snapshot updates and trade broadcasts
-- Prints a summary of commands sent, trades observed, snapshots observed, and errors
-
-Notes:
-
-- This is meant to simulate a busy server and heavy communication load, not packet loss.
-- Because state is persistent, the stress users will also be saved in `trading_state.txt`.
-- For a clean manual demo afterward, either delete `trading_state.txt` or use a fresh prefix argument.
+Developed by Erika Ishii, Yimo Kong, and Elvis Lim for Assignment 5, Option 3. Existing source files contain DigiPen Institute of Technology copyright notices; see the individual file headers.

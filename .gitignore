@@ -23,3 +23,13 @@ obj/
 # Runtime state
 trading_state.txt
 
+# Local nested clone (not part of the application)
+/TradingPlatform/
+
+# Local environment files and credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
