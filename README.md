@@ -4,6 +4,16 @@ A Windows C++17 trading simulator built for a networking assignment. Multiple co
 
 All balances, shares, and trades are simulated. The browser demo runs its own JavaScript trading engine and stores its state in the browser; it does not connect to the C++ TCP server.
 
+## Problem — Stress clients failed to connect
+
+We needed to test whether the Windows C++ server could handle several active trading clients at once. The stress client depended on a running local server.
+
+**What we tested and what failed.** We configured eight concurrent clients with 30 operations each. The first run logged eight connection failures and sent zero commands because the server was unavailable.
+
+**What we changed and what happened.** We started the server before launching the stress client again. The successful run sent 264 commands with zero failures and zero errors, giving us a repeatable way to exercise concurrent traffic.
+
+[Design report and test results](Assignment_5_Design_Report_2403446.pdf)
+
 ## Features
 
 - Username-based accounts with $10,000 in starting cash and 50 shares each of `ACME`, `BETA`, and `GAMMA`.
